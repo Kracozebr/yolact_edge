@@ -169,27 +169,6 @@ dataset_base = Config({
     'joint': None
 })
 
-buckets_rocks_dataset = dataset_base.copy({
-    'name': 'Buckets',
-
-    # 'train_images': '/datasets/2020-11-28/train/',
-    # 'train_info': '/datasets/2020-11-28/train/coco.json',
-    #
-    # 'valid_images': '/datasets/2020-11-28/valid/',
-    # 'valid_info': '/datasets/2020-11-28/valid/coco.json',
-
-    'train_images': '/datasets/20200623_3_classes_split_1268_438_10/train/images',
-    'train_info': '/datasets/20200623_3_classes_split_1268_438_10/train/coco.json',
-
-    'valid_images': '/datasets/20200623_3_classes_split_1268_438_10/valid/images',
-    'valid_info': '/datasets/20200623_3_classes_split_1268_438_10/valid/coco.json',
-
-    'has_gt': True,
-
-    'class_names': ('teeth', 'rock', 'showel'),
-
-})
-
 coco2014_dataset = dataset_base.copy({
     'name': 'COCO 2014',
     
@@ -820,58 +799,8 @@ yolact_base_config = coco_base_config.copy({
     'use_tensorrt_safe_mode': False,
 })
 
-yolact_edge_wo_trt_config = yolact_base_config.copy({
-    # Dataset stuff
-    'dataset': buckets_rocks_dataset,
-    'num_classes': len(buckets_rocks_dataset.class_names) + 1,
-
-    'name': 'yolact_edge_wo_trt'
-})
-
 yolact_edge_config = yolact_base_config.copy({
-    # Dataset stuff
-    'dataset': buckets_rocks_dataset,
-    'num_classes': len(buckets_rocks_dataset.class_names) + 1,
-
     'name': 'yolact_edge',
-    'torch2trt_max_calibration_images': 100,
-    'torch2trt_backbone_int8': True,
-    'torch2trt_protonet_int8': True,
-    'torch2trt_fpn': True,
-    'torch2trt_prediction_module': True,
-    'use_fast_nms': False
-})
-
-yolact_edge_im300_config = yolact_base_config.copy({
-    # Dataset stuff
-    'dataset': buckets_rocks_dataset,
-    'num_classes': len(buckets_rocks_dataset.class_names) + 1,
-
-    'name': 'yolact_edge_im300',
-    'max_size': 300,
-    'backbone': yolact_base_config.backbone.copy({
-        'pred_scales': [[int(x[0] / yolact_base_config.max_size * 300)] for x in yolact_base_config.backbone.pred_scales],
-    }),
-
-    'torch2trt_max_calibration_images': 100,
-    'torch2trt_backbone_int8': True,
-    'torch2trt_protonet_int8': True,
-    'torch2trt_fpn': True,
-    'torch2trt_prediction_module': True,
-    'use_fast_nms': False
-})
-
-yolact_edge_im700_config = yolact_base_config.copy({
-    # Dataset stuff
-    'dataset': buckets_rocks_dataset,
-    'num_classes': len(buckets_rocks_dataset.class_names) + 1,
-
-    'name': 'yolact_edge_im700',
-    'max_size': 700,
-    'backbone': yolact_base_config.backbone.copy({
-        'pred_scales': [[int(x[0] / yolact_base_config.max_size * 700)] for x in yolact_base_config.backbone.pred_scales],
-    }),
-
     'torch2trt_max_calibration_images': 100,
     'torch2trt_backbone_int8': True,
     'torch2trt_protonet_int8': True,
@@ -1024,10 +953,6 @@ yolact_edge_youtubevis_resnet50_config = yolact_edge_youtubevis_config.copy({
 # ----------------------- YOLACT++ CONFIGS ----------------------- #
 
 yolact_plus_base_config = yolact_base_config.copy({
-    # Dataset stuff
-    'dataset': buckets_rocks_dataset,
-    'num_classes': len(buckets_rocks_dataset.class_names) + 1,
-
     'name': 'yolact_plus_base',
 
     'backbone': resnet101_dcn_inter3_backbone.copy({
@@ -1058,9 +983,6 @@ yolact_plus_base_config = yolact_base_config.copy({
 })
 
 yolact_edge_plus_config = yolact_base_config.copy({
-    # Dataset stuff
-    'dataset': buckets_rocks_dataset,
-    'num_classes': len(buckets_rocks_dataset.class_names) + 1,
     'name': 'yolact_edge_plus',
 
     'backbone': resnet101_dcn_inter3_backbone.copy({
@@ -1118,4 +1040,5 @@ def set_cfg(config_name:str):
 def set_dataset(dataset_name:str):
     """ Sets the dataset of the current config. """
     cfg.dataset = eval(dataset_name)
-    
+
+
